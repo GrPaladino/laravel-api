@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Api\ProjectController;
+use App\Http\Controllers\Api\ProjectControllerApi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::apiResource('/projects', ProjectController::class)->except(['slug', 'created_at', 'updated_at']);
+Route::apiResource('/projects', ProjectControllerApi::class)->only(['index', 'show']);
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
