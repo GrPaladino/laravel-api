@@ -1,0 +1,49 @@
+@import "~bootstrap/scss/bootstrap";
+
+.wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+    main {
+        flex-grow: 1;
+    }
+}
+
+a {
+    color: white;
+}
+
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+
+.container {
+
+    .col-3 {
+        height: 700px;
+
+        .card {
+            height: 100%;
+
+            .card-img-top {
+                width: 100%;
+                height: 400px;
+                display: block;
+                object-fit: cover;
+            }
+
+
+            .links {
+                
+
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+    }
+}
