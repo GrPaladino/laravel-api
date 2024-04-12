@@ -19,6 +19,11 @@ class ProjectControllerApi extends Controller
             ->with(['type:id,label,color', 'technologies:id,label,color'])
             ->orderBy('id', 'DESC')
             ->paginate();
+
+        foreach ($projects as $project) {
+            $project->image = !empty($project->image) ? asset('/storage/' . $project->image) : null;
+            $project->description = $project->getAbstract(30);
+        }
         return response()->json($projects);
     }
 
