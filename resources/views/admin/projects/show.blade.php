@@ -28,7 +28,6 @@
                     {!! $technology ? $technology->getBadge() : 'Nessuna tecnologia' !!}
                     @endforeach
                 </p>
-
             </div>
             <div class="links text-start">
                 <a href="{{$project->github_url}}" class="mb-3"><i class="fa-brands fa-github link-dark fa-2xl me-3"></i></a>

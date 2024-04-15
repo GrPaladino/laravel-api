@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 class ProjectControllerApi extends Controller
 {
@@ -15,7 +17,7 @@ class ProjectControllerApi extends Controller
      */
     public function index()
     {
-        $projects = Project::select(['id', 'type_id', 'user_id', 'title', 'description', 'github_url', 'image'])
+        $projects = Project::select(['id', 'type_id', 'user_id', 'title', 'description', 'github_url', 'image', 'slug'])
             ->with(['type:id,label,color', 'technologies:id,label,color'])
             ->orderBy('id', 'DESC')
             ->paginate();
@@ -46,7 +48,16 @@ class ProjectControllerApi extends Controller
      */
     public function show($id)
     {
-        //
+        $project = Project::select(['id', 'type_id', 'user_id', 'title', 'description', 'github_url', 'image', 'slug'])
+            ->where('id', $id)
+            ->with(['type:id,label,color', 'technologies:id,label,color'])
+            ->first();
+
+        $project->image = !empty($project->image) ? asset('/storage/' . $project->image) : null;
+        // $project->author = "graziano";
+
+
+        return response()->json($project);
     }
 
     /**
