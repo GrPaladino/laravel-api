@@ -46,10 +46,10 @@ class ProjectControllerApi extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
         $project = Project::select(['id', 'type_id', 'user_id', 'title', 'description', 'github_url', 'image', 'slug'])
-            ->where('id', $id)
+            ->where('slug', $slug)
             ->with(['type:id,label,color', 'technologies:id,label,color'])
             ->first();
 
