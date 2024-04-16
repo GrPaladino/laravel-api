@@ -20,7 +20,7 @@ class ProjectControllerApi extends Controller
         $projects = Project::select(['id', 'type_id', 'user_id', 'title', 'description', 'github_url', 'image', 'slug'])
             ->with(['type:id,label,color', 'technologies:id,label,color'])
             ->orderBy('id', 'DESC')
-            ->paginate();
+            ->paginate(8);
 
         foreach ($projects as $project) {
             $project->image = !empty($project->image) ? asset('/storage/' . $project->image) : null;

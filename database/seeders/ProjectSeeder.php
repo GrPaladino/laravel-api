@@ -27,11 +27,15 @@ class ProjectSeeder extends Seeder
             $project = new Project;
             $project->title = $faker->catchPhrase();
             $project->type_id = $faker->randomElement($types_id);
-            $project->user_id = $faker->numberBetween(1, 2);
             $project->slug = Str::slug($project->title);
+
+            $project->user_id = $faker->numberBetween(1, 2);
             $project->description = $faker->paragraph(3, true);
             $project->github_url = 'https://github.com/GrPaladino';
             $project->save();
+            $project->slug = Str::slug($project->title) . '-' . $project->id;
+            $project->update();
+
         }
 
     }
