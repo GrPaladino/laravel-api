@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Project;
+use App\Models\Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,19 +27,12 @@ class ProjectControllerApi extends Controller
             $project->image = !empty($project->image) ? asset('/storage/' . $project->image) : null;
             $project->description = $project->getAbstract(30);
         }
-        return response()->json($projects);
+        return response()->json([
+            'result' => $projects,
+            'success' => true,
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
     /**
      * Display the specified resource.
@@ -53,33 +47,54 @@ class ProjectControllerApi extends Controller
             ->with(['type:id,label,color', 'technologies:id,label,color'])
             ->first();
 
+        if (empty($project)) {
+            return response()->json([
+                'message' => 'project non found',
+                'success' => false,
+            ]);
+        }
+
         $project->image = !empty($project->image) ? asset('/storage/' . $project->image) : null;
-        // $project->author = "graziano";
 
 
-        return response()->json($project);
+        return response()->json([
+            'result' => $project,
+            'success' => true,
+        ]);
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
+     * Display a listing of the resource filtered by technology_id.
+     * 
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function projectByType($type_id)
     {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $type = Type::find($type_id);
+
+        if (!$type) {
+            return response()->json([
+                'message' => 'type non found',
+                'success' => false,
+            ]);
+        }
+
+        $projects = Project::select(['id', 'type_id', 'user_id', 'title', 'description', 'github_url', 'image', 'slug'])
+            ->where('type_id', $type_id)
+            ->with(['type:id,label,color', 'technologies:id,label,color'])
+            ->orderBy('id', 'DESC')
+            ->paginate(8);
+
+        foreach ($projects as $project) {
+            $project->image = !empty($project->image) ? asset('/storage/' . $project->image) : null;
+            $project->description = $project->getAbstract(30);
+        }
+        return response()->json([
+            'result' => $projects,
+            'type' => $type,
+            'success' => true,
+        ]);
     }
 }

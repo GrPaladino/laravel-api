@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::apiResource('/projects', ProjectControllerApi::class)->only(['index', 'show']);
+Route::get('project-by-type/{type_id}', [ProjectControllerApi::class, 'projectByType']);
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
